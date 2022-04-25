@@ -1,0 +1,178 @@
+openapi: 3.0.0
+info:
+  title: Book Schelf API 
+  version: 1.0.0
+  description: Provides API to operate with books.
+tags: 
+  - name: BookSchelfService
+paths:
+  /book-schelf-api/v1/books/create:
+    post:
+      tags:
+        - BookSchelfService
+      summary: Create new book in catalog
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookWithKeyDto'
+      responses:
+        201:
+          description: Book is created
+        400:
+          description: Error has occured
+  /book-schelf-api/v1/books/{isbn}/update:
+    put: 
+      tags:
+        - BookSchelfService
+      summary: Update book in catalog
+      operationId: update
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookDto'
+      responses:
+        200:
+          description: Book is updated
+        400:
+          description: Error has occured
+  /book-schelf-api/v1/books/{isbn}/delete:
+    delete:
+      tags:
+        - BookSchelfService
+      summary: Delete book from catalog
+      operationId: delete
+      parameters:
+        - name: isbn
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        200:
+          description: Book has been deleted
+        400:
+          description: Error has occured
+        404:
+          description: Book not found
+  /book-schelf-api/v1/books/search:
+    get:
+      tags:
+        - BookSchelfService
+      summary: Search for book in catalog
+      operationId: search
+      parameters:
+        - name: BookWithKeyDto
+          in: query
+          description: Model for GET request
+          schema:
+            $ref: '#/components/schemas/BookWithKeyDto'
+        - name: PageRequestDto
+          in: query
+          description: Pageable for GET request
+          schema:
+            $ref: '#/components/schemas/PageRequestDto'
+      responses:
+        200:
+          description: Book is updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageBookWithKeyDto'
+        400:
+          description: Error has occured
+        404:
+          description: Book not found
+components:
+  schemas:
+    BookDto:
+      type: object
+      description: Book info
+      properties:
+        name:
+          type: string
+        author:
+          type: string
+        annotation:
+          type: string
+    BookWithKeyDto:
+      allOf:
+        - $ref: '#/components/schemas/BookDto'
+        - properties: 
+            isbn:
+              type: integer
+              format: int64
+    PageRequestDto:
+      type: object
+      properties:
+        page:
+          description: page
+          type: integer
+          format: int32
+        pageSize:
+          description: pageSize
+          type: integer
+          format: int32
+    PageBookWithKeyDto:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookWithKeyDto"
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        pageable:
+          $ref: "#/components/schemas/Pageable"
+    Sort:
+      type: object
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: "#/components/schemas/Sort"
+        unpaged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        pageSize:
+          type: integer
+          format: int32

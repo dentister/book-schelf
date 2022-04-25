@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <property name="sqlDir" value="../sql"/>
+    <changeSet id="1"
+               author="vitalii.kniazev"
+               failOnError="true"
+               logicalFilePath="classpath:/db/changelog/1-db.sql">
+        <sqlFile path="${sqlDir}/1-db.sql" relativeToChangelogFile="true" splitStatements="false"/>
+    </changeSet>
+</databaseChangeLog>
