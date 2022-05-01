@@ -65,12 +65,12 @@ paths:
           description: Error has occured
         404:
           description: Book not found
-  /book-schelf-api/v1/books/search:
+  /book-schelf-api/v1/books/extSearch:
     get:
       tags:
         - BookSchelfService
       summary: Search for book in catalog
-      operationId: search
+      operationId: extSearch
       parameters:
         - name: BookWithKeyDto
           in: query
@@ -89,6 +89,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PageBookWithKeyDto'
+        400:
+          description: Error has occured
+        404:
+          description: Book not found
+  /book-schelf-api/v1/books/search:
+    get:
+      tags:
+        - BookSchelfService
+      summary: Search for book in catalog
+      operationId: search
+      parameters:
+        - name: BookWithKeyDto
+          in: query
+          description: Model for GET request
+          schema:
+            $ref: '#/components/schemas/BookWithKeyDto'
+      responses:
+        200:
+          description: Book is updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookWithKeyDto"
+        400:
+          description: Error has occured
+        404:
+          description: Book not found
+  /book-schelf-api/v1/books/getAll:
+    get:
+      tags: 
+        - BookSchelfService
+      summary: Get all books in simple format
+      operationId: getAll
+      responses:
+        200:
+          description: Book is updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookWithKeyDto"
         400:
           description: Error has occured
         404:

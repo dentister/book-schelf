@@ -1,5 +1,8 @@
 package com.schnitzel.book.schelf.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -42,7 +45,18 @@ public class BookSchelfServiceApiControllerImpl implements BookSchelfServiceApiD
     }
 
     @Override
-    public ResponseEntity<PageBookWithKeyDto> search(BookWithKeyDto bookDto, PageRequestDto pageRequestDto) {
+    public ResponseEntity<List<BookWithKeyDto>> search(BookWithKeyDto bookDto) {
+        Book example = MappingFunctions.toBookWithKey().apply(bookDto);
+
+        List<BookWithKeyDto> resultList = bookSchelfService.search(example).stream()
+                .map(book -> MappingFunctions.map(BookWithKeyDto.class).apply(book))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(resultList);
+    }
+    
+    @Override
+    public ResponseEntity<PageBookWithKeyDto> extSearch(BookWithKeyDto bookDto, PageRequestDto pageRequestDto) {
         PageRequest pageRequest = PageRequest.of(
                 pageRequestDto.getPage() == null ? DEFAULT_PAGE : pageRequestDto.getPage(),
                 pageRequestDto.getPageSize() == null ? DEFAULT_PAGE_SIZE : pageRequestDto.getPageSize());
@@ -55,7 +69,20 @@ public class BookSchelfServiceApiControllerImpl implements BookSchelfServiceApiD
     }
 
     @Override
+    public ResponseEntity<List<BookWithKeyDto>> getAll() {
+        System.out.println("ResponseEntity<List<BookWithKeyDto>> getAll() was called.");
+
+        List<BookWithKeyDto> resultList = bookSchelfService.getAll().stream()
+                .map(book -> MappingFunctions.map(BookWithKeyDto.class).apply(book))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(resultList);
+    }
+
+    @Override
     public ResponseEntity<Void> update(Long isbn, BookDto updateBookDto) {
+        System.out.printf("BookSchelfServiceApiControllerImpl.update [isbn={}, bookDto={}]\n", isbn, updateBookDto);
+        
         Book book = MappingFunctions.toBook().apply(updateBookDto);
 
         bookSchelfService.update(isbn, book);

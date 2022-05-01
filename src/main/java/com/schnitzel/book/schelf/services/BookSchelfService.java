@@ -1,5 +1,7 @@
 package com.schnitzel.book.schelf.services;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -60,9 +62,19 @@ public class BookSchelfService {
     public Book getByIsbn(Long isbn) {
         return bookRepository.findByIsbn(isbn).orElseThrow(() -> new EntityNotFoundException());
     }
+    
+    public List<Book> getAll() {
+        return bookRepository.findAll();
+    }
+    
+    public List<Book> search(Book probe) {
+        return bookRepository.findAll(Example.of(probe));
+    }
 
     public Page<Book> search(Book probe, PageRequest pageRequest) {
         return bookRepository.findAll(Example.of(probe), pageRequest);
     }
+    
+
 
 }

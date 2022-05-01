@@ -30,4 +30,8 @@ public class MappingFunctions {
     public static <T> Function<Page, T> pageToPageResponse(Class<T> clazz) {
         return source -> mapper.map(source, clazz);
     }
+    
+    public static <S, T> Function<S, T> map(Class<T> clazz) {
+        return source -> mapper.map(source, clazz);
+    }
 }

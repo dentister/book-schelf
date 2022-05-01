@@ -35,6 +35,8 @@ public class TestUtil {
             actionToCheck.run();
         } catch (HttpClientErrorException e) {
             exception = e;
+        } catch (Exception e) {
+            log.error("VIKN: " + e.getMessage() + " " + e);
         }
 
         Assert.assertEquals(expectedStatus, exception.getRawStatusCode());

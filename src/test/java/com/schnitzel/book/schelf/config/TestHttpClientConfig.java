@@ -6,10 +6,6 @@ import org.springframework.web.client.RestTemplate;
 @TestConfiguration
 public class TestHttpClientConfig {
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 
 
 }
